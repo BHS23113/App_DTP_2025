@@ -5,14 +5,15 @@ cursor = connection.cursor()
 
 
 while True:
-    choice = input("Press A to add a movie, U to update a movie D to delete a movie and L to shiow a list with all the mioves\n")
+    choice = input("Press A to add a workout, U to update a workout D to delete a workout and L to shiow a list with all the workouts\n")
     choice_upper = choice.title()
 
     if choice_upper == "A":
-        name = input("Please provide a name for the moive\n")
+        name = input("Please provide a name for the workout\n")
+        duration = input("Please endter the duration of your workout in minutes\n")
     
-        data = [name]
-        cursor.execute("INSERT INTO `movies` (`name`) VALUES (?)",data)
+        data = [name, duration]
+        cursor.execute("INSERT INTO `movies` (name, duration) VALUES (?, ?)",data)
         connection.commit()
     
     elif choice_upper == "U":
