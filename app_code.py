@@ -39,4 +39,15 @@ while True:
             print(str(movie[0])+'. - '+movie[1])
     
     else:
-        break
+        print("Please press A, U, D or L")
+        while True:
+            end = input("Please press E to end the program or R to continue ")
+            end_cap = end.title()
+            if end_cap == "E":
+                break
+            elif end_cap == "R":
+                continue
+            else:
+                print("Please press E or R")
+        if end_cap == "E":
+            break
