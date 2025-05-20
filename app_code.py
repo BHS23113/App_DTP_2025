@@ -1,5 +1,13 @@
 import sqlite3
 
+def isint(num):
+  try:
+    int(num)
+    return True
+  except:
+    return False
+
+
 connection = sqlite3.connect("movies.db")
 cursor = connection.cursor()
 
@@ -9,40 +17,50 @@ while True:
     choice_upper = choice.title()
 
     if choice_upper == "A":
-        name = input("Please provide a name for the workout\n")
-        duration = input("Please endter the duration of your workout in minutes\n")
+        date = input("Please provide the date D/M/Y\n")
+        workout_type = input("please enter the name of the work out")
+        sets = input("Please enter the number of sets")
+        reps = input("Please enter the number of reps")
+        weight = input("Please enter the weight")
+        while True:
+            duration = input("Please endter the duration of your workout in minutes\n")
+            if isint(duration) == False:
+                print('Please enter a number')
+                continue
+            else:
+                break
     
-        data = [name, duration]
-        cursor.execute("INSERT INTO `movies` (name, duration) VALUES (?, ?)",data)
+        data = [date, duration]
+        cursor.execute("INSERT INTO `workout` (date, duration) VALUES (?, ?)",data)
         connection.commit()
     
     elif choice_upper == "U":
         id = input("Please provide the ID for the movie you want to update\n")
-        name = input("Please provide a name for the moive ")
+        name = input("Please provide a name for the moive\n")
 
-        data = [name, id]
-        cursor.execute("UPDATE movies SET name=? WHERE id=?",data)
+        data = [date, id]
+        cursor.execute("UPDATE workout SET name=? WHERE id=?",data)
         connection.commit()
 
     elif choice_upper == "D":
         id = input("Please provide the ID for the movie you want to delete\n")
         
         data = [id]
-        cursor.execute("DELETE FROM movies WHERE id=?",data)
+        cursor.execute("DELETE FROM workout WHERE id=?",data)
         connection.commit()
 
     elif choice_upper == "L":
-        result = cursor.execute("SELECT * FROM movies")
+        result = cursor.execute("SELECT * FROM workout")
 
-        movies = result.fetchall()
+        workout = result.fetchall()
 
-        for movie in movies:
+        for movie in workout:
             print(str(movie[0])+'. - '+movie[1])
     
     else:
         print("Please press A, U, D or L")
         while True:
-            end = input("Please press E to end the program or R to continue ")
+            end = input("Please press E to end the program or R to continue\n")
             end_cap = end.title()
             if end_cap == "E":
                 break
