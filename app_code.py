@@ -13,11 +13,12 @@ cursor = connection.cursor()
 
 
 while True:
-    choice = input("Press A to add a workout, U to update a workout D to delete a workout and L to shiow a list with all the workouts\n")
+    choice = input("Press I to show a list with all the workouts, O to list a specific muscle group and P to list workout by category\n")
     choice_upper = choice.title()
 
     if choice_upper == "A":
-        date = input("Please provide the date D/M/Y\n")
+        date = input("Please provide the day\n")
+        date_upper = date.upper()
         workout_type = input("please enter the name of the work out")
         sets = input("Please enter the number of sets")
         reps = input("Please enter the number of reps")
@@ -30,8 +31,8 @@ while True:
             else:
                 break
     
-        data = [date, duration]
-        cursor.execute("INSERT INTO `workout` (date, duration) VALUES (?, ?)",data)
+        data = [date, duration, workout_type]
+        cursor.execute("INSERT INTO `workout` (date, duration, name) VALUES (?, ?, ?)",data)
         connection.commit()
     
     elif choice_upper == "U":
@@ -49,7 +50,7 @@ while True:
         cursor.execute("DELETE FROM workout WHERE id=?",data)
         connection.commit()
 
-    elif choice_upper == "L":
+    elif choice_upper == "I":
         result = cursor.execute("SELECT * FROM workout")
 
         workout = result.fetchall()
@@ -58,7 +59,7 @@ while True:
             print(str(movie[0])+'. - '+movie[1])
     
     else:
-        print("Please press A, U, D or L")
+        print("Please press I, O or P")
         while True:
             end = input("Please press E to end the program or R to continue\n")
             end_cap = end.title()
