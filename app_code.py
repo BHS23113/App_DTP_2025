@@ -1,73 +1,66 @@
 import sqlite3
 
-def isint(num):
-  try:
-    int(num)
-    return True
-  except:
-    return False
-
-
 connection = sqlite3.connect("movies.db")
 cursor = connection.cursor()
 
-
 while True:
-    choice = input("Press I to show a list with all the workouts, O to list a specific muscle group and P to list workout by category\n")
-    choice_upper = choice.title()
+    choice = input("Press I to show a list with all the workouts, O to list a specific muscle group, P to list workout by category or E to end the program\n")
+    choice_upper = choice.upper()
 
-    if choice_upper == "A":
-        date = input("Please provide the day\n")
-        date_upper = date.upper()
-        workout_type = input("please enter the name of the work out")
-        sets = input("Please enter the number of sets")
-        reps = input("Please enter the number of reps")
-        weight = input("Please enter the weight")
-        while True:
-            duration = input("Please endter the duration of your workout in minutes\n")
-            if isint(duration) == False:
-                print('Please enter a number')
-                continue
-            else:
-                break
-    
-        data = [date, duration, workout_type]
-        cursor.execute("INSERT INTO `workout` (date, duration, name) VALUES (?, ?, ?)",data)
-        connection.commit()
-    
-    elif choice_upper == "U":
-        id = input("Please provide the ID for the movie you want to update\n")
-        name = input("Please provide a name for the moive\n")
+    if choice_upper == "P":
+        category = input("Enter F for Push, G for Pull or H for Legs:\n")
+        category_upper = category.upper()
 
-        data = [date, id]
-        cursor.execute("UPDATE workout SET name=? WHERE id=?",data)
-        connection.commit()
+        if category_upper == "F":
+            result = cursor.execute("SELECT * FROM workout WHERE set_id = 1")
 
-    elif choice_upper == "D":
-        id = input("Please provide the ID for the movie you want to delete\n")
-        
-        data = [id]
-        cursor.execute("DELETE FROM workout WHERE id=?",data)
-        connection.commit()
+        elif category_upper == "G":
+            result = cursor.execute("SELECT * FROM workout WHERE set_id = 2")
 
-    elif choice_upper == "I":
-        result = cursor.execute("SELECT * FROM workout")
+        elif category_upper == "H":
+            result = cursor.execute("SELECT * FROM workout WHERE set_id = 3")
+
+        else:
+            print("Invalid category. Please enter F, G, or H.")
+            continue
 
         workout = result.fetchall()
 
-        for movie in workout:
-            print(str(movie[0])+'. - '+movie[1])
-    
-    else:
-        print("Please press I, O or P")
-        while True:
-            end = input("Please press E to end the program or R to continue\n")
-            end_cap = end.title()
-            if end_cap == "E":
-                break
-            elif end_cap == "R":
-                continue
-            else:
-                print("Please press E or R")
-        if end_cap == "E":
+        for exercises in workout:
+            print(str(exercises[0]) + '. - ' + exercises[1])
+        print()
+
+        start = input("Press R to return or E to end:\n").upper()
+        if start == "E":
             break
+        elif start == "R":
+            continue
+        else:
+            print("Invalid input. Returning to main menu.")
+            continue
+
+    elif choice_upper == "I":
+        result = cursor.execute("SELECT * FROM workout")
+        workout = result.fetchall()
+
+        for movie in workout:
+            print(str(movie[0]) + '. - ' + movie[1])
+        print()
+
+    elif choice_upper == "O":
+        muscle_group = input("Enter the muscle group to search:\n")
+        result = cursor.execute
+        workout = result.fetchall()
+
+        for movie in workout:
+            print(str(movie[0]) + '. - ' + movie[1])
+        print()
+
+    elif choice_upper == "E":
+        break
+
+    else:
+        print("Invalid choice. Please press I, O, P, or E.")
+        continue
+
+connection.close()
