@@ -1,28 +1,34 @@
+"""This program is a sql and python database, it stores data for different exercises and allows the user to print them out in different catagories"""
+
+
 import sqlite3
 
 connection = sqlite3.connect("movies.db")
 cursor = connection.cursor()
 
 while True:
-    choice = input("Press I to show a list with all the workouts, O to list a specific muscle group, P to list workout by category or E to end the program\n")
+    choice = input("Press \033[36mI\033[0m to show a list with all the workouts, \033[36mO\033[0m to list a specific muscle group, \033[36mP\033[0m to list workout by category or \033[31mE\033[0m to end the program\n")
     choice_upper = choice.upper()
 
     if choice_upper == "P":
-        category = input("Enter F for Push, G for Pull or H for Legs:\n")
-        category_upper = category.upper()
+        
+        while True:
+            category = input("\n\nEnter \033[36mF\033[0m for Push, \033[36mG\033[0m for Pull or \033[36mH\033[0m for Legs:\n")
+            category_upper = category.upper()
+            if category_upper == "F":
+                result = cursor.execute("SELECT * FROM workout WHERE set_id = 1")
+                break
 
-        if category_upper == "F":
-            result = cursor.execute("SELECT * FROM workout WHERE set_id = 1")
+            elif category_upper == "G":
+                result = cursor.execute("SELECT * FROM workout WHERE set_id = 2")
+                break
 
-        elif category_upper == "G":
-            result = cursor.execute("SELECT * FROM workout WHERE set_id = 2")
+            elif category_upper == "H":
+                result = cursor.execute("SELECT * FROM workout WHERE set_id = 3")
+                break
 
-        elif category_upper == "H":
-            result = cursor.execute("SELECT * FROM workout WHERE set_id = 3")
-
-        else:
-            print("Invalid category. Please enter F, G, or H.")
-            continue
+            else:
+                print("\n\n\033[31mInvalid category.\033[0m Please enter \033[36mF\033[0m, \033[36mG\033[0m, or \033[36mH\033[0m.\n")
 
         workout = result.fetchall()
 
@@ -30,13 +36,13 @@ while True:
             print(str(exercises[0]) + '. - ' + exercises[1])
         print()
 
-        start = input("Press R to return or E to end:\n").upper()
+        start = input("\n\nPress \033[36mR\033[0m to return or \033[31mE\033[0m to end:\n").upper()
         if start == "E":
             break
         elif start == "R":
             continue
         else:
-            print("Invalid input. Returning to main menu.")
+            print("\n\n\033[31mInvalid input returning to main menu.\033[0m\n")
             continue
 
     elif choice_upper == "I":
@@ -48,7 +54,7 @@ while True:
         print()
 
     elif choice_upper == "O":
-        muscle_group = input("Enter the muscle group to search:\n")
+        muscle_group = input("\n\nEnter the muscle group to search:\n")
         result = cursor.execute
         workout = result.fetchall()
 
@@ -60,7 +66,7 @@ while True:
         break
 
     else:
-        print("Invalid choice. Please press I, O, P, or E.")
+        print("\n\n\033[31mInvalid choice.\033[0m Please enter \033[36mF\033[0m, \033[36mG\033[0m, \033[36mH\033[0m. or \033[31mE\033[0m.\n")
         continue
 
 connection.close()
